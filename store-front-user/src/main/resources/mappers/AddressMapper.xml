@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.aliang.mapper.AddressMapper">
+  <resultMap id="BaseResultMap" type="org.aliang.pojo.Address">
+    <!--@mbg.generated-->
+    <!--@Table address-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, linkman, phone, address, user_id
+  </sql>
+</mapper>
