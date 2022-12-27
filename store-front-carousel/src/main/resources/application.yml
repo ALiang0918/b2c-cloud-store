@@ -1,7 +1,7 @@
 spring:
   # 连接池配置
   datasource:
-    url: jdbc:mysql://139.9.2.237:3307/store_user?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://139.9.2.237:3307/store_carousel?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: ln123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,7 +18,7 @@ ribbon:
   eager-load:
     enabled: true #开启饥饿加载提升第一次访问速度
     clients:
-      - user-service #指定开启服务
+      - carousel-service #指定开启服务
 feign:
   httpclient:
     enabled: true  # 开启httpClient开关,启动连接池,提升feign连接效率!
