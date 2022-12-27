@@ -19,3 +19,7 @@ spring:
           uri: lb://carousel-service #静态资源处理以及oss上传服务!
           predicates:
             - Path=/carousel/**
+        - id: category-service # 商品类别服务
+          uri: lb://category-service
+          predicates:
+            - Path=/category/**
