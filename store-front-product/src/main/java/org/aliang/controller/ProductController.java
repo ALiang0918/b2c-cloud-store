@@ -1,6 +1,7 @@
 package org.aliang.controller;
 
 import org.aliang.param.ProductHotParam;
+import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductPromoParam;
 import org.aliang.service.ProductService;
 import org.aliang.utils.R;
@@ -40,5 +41,27 @@ public class ProductController {
     @PostMapping("/category/list")
     public R getCategoryList(){
         return productService.getCategoryList();
+    }
+
+    /**
+     * 类别商品接口
+     * @param productIdsParam
+     * @param result
+     * @return
+     */
+    @PostMapping("/bycategory")
+    public R byCategory(@RequestBody @Validated ProductIdsParam productIdsParam,BindingResult result){
+        if (result.hasErrors()){
+            return R.fail("查询失败!");
+        }
+        return productService.byCategory(productIdsParam);
+    }
+
+    @PostMapping("/all")
+    public R all(@RequestBody @Validated ProductIdsParam productIdsParam,BindingResult result){
+        if (result.hasErrors()){
+            return R.fail("查询失败!");
+        }
+        return productService.byCategory(productIdsParam);
     }
 }

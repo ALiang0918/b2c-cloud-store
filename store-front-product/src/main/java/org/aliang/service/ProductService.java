@@ -2,6 +2,7 @@ package org.aliang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.aliang.param.ProductHotParam;
+import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductPromoParam;
 import org.aliang.pojo.Product;
 import org.aliang.utils.R;
@@ -27,4 +28,11 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R getCategoryList();
+
+    /**
+     * 类别商品接口
+     * @param productIdsParam
+     * @return
+     */
+    R byCategory(ProductIdsParam productIdsParam);
 }

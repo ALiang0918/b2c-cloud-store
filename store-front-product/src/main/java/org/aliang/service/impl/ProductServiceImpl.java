@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aliang.clients.CategoryClient;
 import org.aliang.mapper.ProductMapper;
 import org.aliang.param.ProductHotParam;
+import org.aliang.param.ProductIdsParam;
 import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
 import org.aliang.utils.R;
@@ -92,5 +93,25 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public R getCategoryList() {
         return categoryClient.getCategoryList();
+    }
+
+    /**
+     * 类别商品接口
+     *
+     * @param productIdsParam
+     * @return
+     */
+    @Override
+    public R byCategory(ProductIdsParam productIdsParam) {
+        LambdaQueryWrapper<Product> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (productIdsParam.getCategoryID().size() != 0){
+            lambdaQueryWrapper.in(Product::getCategoryId,productIdsParam.getCategoryID());
+        }
+        IPage<Product> page = new Page<>(productIdsParam.getCurrentPage(),productIdsParam.getPageSize());
+        page = productMapper.selectPage(page,lambdaQueryWrapper);
+        List<Product> productList = page.getRecords();
+        Long total = (Long) page.getTotal();
+        log.info("org.aliang.service.impl.ProductServiceImpl.byCategory()业务方法结束，查询结果为：{}",total);
+        return R.ok("查询成功！",productList,total);
     }
 }
