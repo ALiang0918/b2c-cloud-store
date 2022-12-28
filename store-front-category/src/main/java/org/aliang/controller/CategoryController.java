@@ -38,4 +38,13 @@ public class CategoryController {
         }
         return categoryService.hots(productHotParam);
     }
+
+    /**
+     * 查询商品类别集合
+     * @return
+     */
+    @GetMapping("/list")
+    public R getCategoryList(){
+        return categoryService.getCategoryList();
+    }
 }

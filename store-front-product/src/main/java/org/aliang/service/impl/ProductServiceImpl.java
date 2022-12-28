@@ -83,4 +83,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         log.info("org.aliang.service.impl.ProductServiceImpl.hots()业务方法执行完毕，结果为：{}","查询商品成功");
         return R.ok("查询成功！",productList);
     }
+
+    /**
+     * 查询商品类别集合
+     *
+     * @return
+     */
+    @Override
+    public R getCategoryList() {
+        return categoryClient.getCategoryList();
+    }
 }

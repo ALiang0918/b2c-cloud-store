@@ -21,4 +21,10 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R hots(ProductHotParam productHotParam);
+
+    /**
+     * 查询商品类别集合
+     * @return
+     */
+    R getCategoryList();
 }

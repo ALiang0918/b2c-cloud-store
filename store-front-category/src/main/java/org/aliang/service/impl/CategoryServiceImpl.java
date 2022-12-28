@@ -62,4 +62,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         log.info("org.aliang.service.impl.CategoryServiceImpl.hots()业务方法执行完毕，结果为：{}","查询成功");
         return R.ok("类别集合id查询成功",idList);
     }
+
+    /**
+     * 查询商品类别集合
+     *
+     * @return
+     */
+    @Override
+    public R getCategoryList() {
+        List<Category> categoryList = categoryMapper.selectList(null);
+        log.info("org.aliang.service.impl.CategoryServiceImpl.getCategoryList()业务方法执行完毕");
+        return R.ok("查询商品类别集合成功！",categoryList);
+    }
 }

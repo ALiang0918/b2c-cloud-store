@@ -20,4 +20,10 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     R hots(ProductHotParam productHotParam);
+
+    /**
+     * 查询商品类别集合
+     * @return
+     */
+    R getCategoryList();
 }
