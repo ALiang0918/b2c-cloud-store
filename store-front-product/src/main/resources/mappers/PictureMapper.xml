@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.aliang.mapper.PictureMapper">
+  <resultMap id="BaseResultMap" type="org.aliang.pojo.Picture">
+    <!--@mbg.generated-->
+    <!--@Table product_picture-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_picture" jdbcType="CHAR" property="productPicture" />
+    <result column="intro" jdbcType="LONGVARCHAR" property="intro" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, product_id, product_picture, intro
+  </sql>
+</mapper>

@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aliang.clients.CategoryClient;
+import org.aliang.mapper.PictureMapper;
 import org.aliang.mapper.ProductMapper;
 import org.aliang.param.ProductHotParam;
 import org.aliang.param.ProductIdsParam;
+import org.aliang.pojo.Picture;
 import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
 import org.aliang.utils.R;
@@ -24,6 +26,9 @@ import java.util.List;
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private PictureMapper pictureMapper;
 
     @Autowired
     private CategoryClient categoryClient;
@@ -113,5 +118,35 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Long total = (Long) page.getTotal();
         log.info("org.aliang.service.impl.ProductServiceImpl.byCategory()业务方法结束，查询结果为：{}",total);
         return R.ok("查询成功！",productList,total);
+    }
+
+    /**
+     * 根据商品id查询商品详情
+     *
+     * @param productID 商品id 已校验
+     * @return
+     */
+    @Override
+    public R detail(Integer productID) {
+        Product product = productMapper.selectById(productID);
+        log.info("org.aliang.service.impl.ProductServiceImpl.detail()业务方法执行完毕,查询商品id为：{}",productID);
+        return R.ok("查询成功！",product);
+    }
+
+    /**
+     * 根据商品id查询商品的图片
+     *
+     * @param productID
+     * @return
+     */
+    @Override
+    public R pictures(Integer productID) {
+        LambdaQueryWrapper<Picture> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Picture::getProductId,productID);
+        List<Picture> pictureList = pictureMapper.selectList(lambdaQueryWrapper);
+        if (pictureList == null || pictureList.size() == 0){
+            return R.fail("查询商品图片失败！");
+        }
+        return R.ok("查询商品图片成功！",pictureList);
     }
 }

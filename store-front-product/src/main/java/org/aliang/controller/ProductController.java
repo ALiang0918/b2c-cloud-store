@@ -1,6 +1,7 @@
 package org.aliang.controller;
 
 import org.aliang.param.ProductHotParam;
+import org.aliang.param.ProductIdParam;
 import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductPromoParam;
 import org.aliang.service.ProductService;
@@ -63,5 +64,21 @@ public class ProductController {
             return R.fail("查询失败!");
         }
         return productService.byCategory(productIdsParam);
+    }
+
+    @PostMapping("/detail")
+    public R detail(@RequestBody @Validated ProductIdParam productIdParam,BindingResult result){
+        if (result.hasErrors()){
+            return R.fail("参数异常！");
+        }
+        return productService.detail(productIdParam.getProductID());
+    }
+
+    @PostMapping("/pictures")
+    public R pictures(@RequestBody @Validated ProductIdParam productIdParam,BindingResult result){
+        if (result.hasErrors()){
+            return R.fail("参数异常！");
+        }
+        return productService.pictures(productIdParam.getProductID());
     }
 }

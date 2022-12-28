@@ -35,4 +35,18 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R byCategory(ProductIdsParam productIdsParam);
+
+    /**
+     * 根据商品id查询商品详情
+     * @param productID 商品id 已校验
+     * @return
+     */
+    R detail(Integer productID);
+
+    /**
+     * 根据商品id查询商品的图片
+     * @param productID
+     * @return
+     */
+    R pictures(Integer productID);
 }
