@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aliang.clients.CategoryClient;
+import org.aliang.clients.SearchClient;
 import org.aliang.mapper.PictureMapper;
 import org.aliang.mapper.ProductMapper;
 import org.aliang.param.ProductHotParam;
 import org.aliang.param.ProductIdsParam;
+import org.aliang.param.ProductSearchParam;
 import org.aliang.pojo.Picture;
 import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
@@ -32,6 +34,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Autowired
     private CategoryClient categoryClient;
+
+    @Autowired
+    private SearchClient searchClient;
     /**
      * 根据类别名称查询热门产品
      *
@@ -160,5 +165,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         List<Product> productList = productMapper.selectList(null);
         log.info("org.aliang.service.impl.ProductServiceImpl.getProductList()业务方法执行完毕");
         return productList;
+    }
+
+    /**
+     * 商品搜索服务，需要远程调用搜索服务
+     *
+     * @param productSearchParam
+     * @return
+     */
+    @Override
+    public R search(ProductSearchParam productSearchParam) {
+        return searchClient.searchProduct(productSearchParam);
     }
 }
