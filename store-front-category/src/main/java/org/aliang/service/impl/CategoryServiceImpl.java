@@ -74,4 +74,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         log.info("org.aliang.service.impl.CategoryServiceImpl.getCategoryList()业务方法执行完毕");
         return R.ok("查询商品类别集合成功！",categoryList);
     }
+
+    /**
+     * 根据商品名称查询商品id 供商品服务调用
+     *
+     * @param productHotParam
+     * @return
+     */
+    @Override
+    public R names(ProductHotParam productHotParam) {
+        LambdaQueryWrapper<Category> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Category::getCategoryName,productHotParam.getCategoryName());
+        lambdaQueryWrapper.select(Category::getCategoryId);
+        List<Object> categoryIdList = categoryMapper.selectObjs(lambdaQueryWrapper);
+        log.info("org.aliang.service.impl.CategoryServiceImpl.names业务完成，结果为:{}",categoryIdList);
+        return R.ok("查询成功！",categoryIdList);
+    }
 }

@@ -47,4 +47,16 @@ public class CategoryController {
     public R getCategoryList(){
         return categoryService.getCategoryList();
     }
+
+    /**
+     * 根据商品名称查询商品id
+     * @return
+     */
+    @PostMapping("/names")
+    public R names(@RequestBody @Validated ProductHotParam productHotParam,BindingResult result){
+        if (result.hasErrors()){
+            return R.fail("参数异常");
+        }
+        return categoryService.names(productHotParam);
+    }
 }

@@ -26,4 +26,11 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     R getCategoryList();
+
+    /**
+     * 根据商品名称查询商品id 供商品服务调用
+     * @param productHotParam
+     * @return
+     */
+    R names(ProductHotParam productHotParam);
 }
