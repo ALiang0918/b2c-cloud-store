@@ -6,9 +6,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class ProductIdsParam {
+public class ProductIdsParam extends PageParam{
     @NotNull
     private List<Integer> categoryID;
-    private int currentPage;
-    private int pageSize;
+
 }

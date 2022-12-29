@@ -149,4 +149,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return R.ok("查询商品图片成功！",pictureList);
     }
+
+    /**
+     * 商品搜索服务，获取全部商品信息
+     *
+     * @return
+     */
+    @Override
+    public List<Product> getProductList() {
+        List<Product> productList = productMapper.selectList(null);
+        log.info("org.aliang.service.impl.ProductServiceImpl.getProductList()业务方法执行完毕");
+        return productList;
+    }
 }

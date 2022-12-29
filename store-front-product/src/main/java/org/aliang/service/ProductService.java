@@ -7,6 +7,8 @@ import org.aliang.param.ProductPromoParam;
 import org.aliang.pojo.Product;
 import org.aliang.utils.R;
 
+import java.util.List;
+
 public interface ProductService extends IService<Product> {
 
     /**
@@ -49,4 +51,10 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R pictures(Integer productID);
+
+    /**
+     * 商品搜索服务，获取全部商品信息
+     * @return
+     */
+    List<Product> getProductList();
 }
