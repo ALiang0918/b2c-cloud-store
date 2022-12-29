@@ -175,6 +175,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public R search(ProductSearchParam productSearchParam) {
-        return searchClient.searchProduct(productSearchParam);
+        R r = searchClient.searchProduct(productSearchParam);
+        log.info("org.aliang.service.impl.ProductServiceImpl.search业务结束，结果为：{}",r);
+        return r;
     }
 }
