@@ -7,6 +7,7 @@ import org.aliang.pojo.Carousel;
 import org.aliang.service.CarouselService;
 import org.aliang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CarouselServiceImpl extends ServiceImpl<CarouselMapper, Carousel> i
      * @return
      */
     @Override
+    @Cacheable(value = "list.carousel",key = "#root.methodName")
     public R getList() {
         LambdaQueryWrapper<Carousel> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(Carousel::getPriority);

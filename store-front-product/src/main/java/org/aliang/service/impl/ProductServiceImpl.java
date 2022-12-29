@@ -18,6 +18,7 @@ import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
 import org.aliang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -44,6 +45,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "list.product",key = "#categoryName")
     public R promo(String categoryName) {
         R r = categoryClient.byName(categoryName);
         if (r.getCode().equals(R.FAIL_CODE)){
@@ -74,6 +76,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "list.product",key = "#productHotParam.categoryName")
     public R hots(ProductHotParam productHotParam) {
         R hots = categoryClient.hots(productHotParam);
         if (hots.getCode().equals(R.FAIL_CODE)){
@@ -112,6 +115,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "list.product",key = "#productIdsParam.categoryID +'-'+#productIdsParam.currentPage+'-'+#productIdsParam.pageSize")
     public R byCategory(ProductIdsParam productIdsParam) {
         LambdaQueryWrapper<Product> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (productIdsParam.getCategoryID().size() != 0){
@@ -132,6 +136,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "product",key = "#productID")
     public R detail(Integer productID) {
         Product product = productMapper.selectById(productID);
         log.info("org.aliang.service.impl.ProductServiceImpl.detail()业务方法执行完毕,查询商品id为：{}",productID);
@@ -145,6 +150,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "picture",key = "#productID")
     public R pictures(Integer productID) {
         LambdaQueryWrapper<Picture> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Picture::getProductId,productID);
@@ -161,6 +167,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
+    @Cacheable(value = "list.category",key = "#root.methodName")
     public List<Product> getProductList() {
         List<Product> productList = productMapper.selectList(null);
         log.info("org.aliang.service.impl.ProductServiceImpl.getProductList()业务方法执行完毕");
