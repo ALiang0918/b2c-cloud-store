@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -14,9 +16,11 @@ public class Collect implements Serializable {
     private Integer id;
 
     @TableField(value = "user_id")
+    @JsonProperty(value = "user_id")
     private Integer userId;
 
     @TableField(value = "product_id")
+    @JsonProperty(value = "product_id")
     private Integer productId;
 
     @TableField(value = "collect_time")

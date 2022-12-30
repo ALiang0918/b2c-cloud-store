@@ -1,8 +1,12 @@
 package org.aliang.clients;
 
+import org.aliang.param.ProductCollectParam;
 import org.aliang.pojo.Product;
+import org.aliang.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -15,4 +19,7 @@ public interface ProductClient {
      */
     @GetMapping("/product/list")
     List<Product> getProductList();
+
+    @PostMapping("/product/collect/list")
+    R getCollectList(@RequestBody ProductCollectParam productCollectParam);
 }

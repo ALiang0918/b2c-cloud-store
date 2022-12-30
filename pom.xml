@@ -18,6 +18,7 @@
         <module>store-front-category</module>
         <module>store-search</module>
         <module>store-front-collect</module>
+        <module>store-front-cart</module>
     </modules>
 
     <parent>

@@ -1,6 +1,7 @@
 package org.aliang.controller;
 
 import org.aliang.param.CollectParam;
+import org.aliang.pojo.Collect;
 import org.aliang.service.CollectService;
 import org.aliang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,17 @@ public class CollectController {
     @Autowired
     private CollectService collectService;
     @PostMapping("/save")
-    public R save(@RequestBody CollectParam collectParam){
-        return collectService.saveCollect(collectParam);
+    public R save(@RequestBody Collect collect){
+        return collectService.saveCollect(collect);
+    }
+
+    @PostMapping("/list")
+    public R getCollectList(@RequestBody Collect collect){
+        return collectService.getCollectList(collect.getUserId());
+    }
+
+    @PostMapping("/remove")
+    public R remove(@RequestBody Collect collect){
+        return collectService.removeCollect(collect);
     }
 }

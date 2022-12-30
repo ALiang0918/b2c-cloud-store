@@ -1,6 +1,7 @@
 package org.aliang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.aliang.param.ProductCollectParam;
 import org.aliang.param.ProductHotParam;
 import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductSearchParam;
@@ -63,4 +64,11 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R search(ProductSearchParam productSearchParam);
+
+    /**
+     * 根据商品id集合查询商品集合
+     * @param productCollectParam
+     * @return
+     */
+    R getProductByIds(ProductCollectParam productCollectParam);
 }

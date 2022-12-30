@@ -10,6 +10,7 @@ import org.aliang.clients.CategoryClient;
 import org.aliang.clients.SearchClient;
 import org.aliang.mapper.PictureMapper;
 import org.aliang.mapper.ProductMapper;
+import org.aliang.param.ProductCollectParam;
 import org.aliang.param.ProductHotParam;
 import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductSearchParam;
@@ -184,6 +185,23 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public R search(ProductSearchParam productSearchParam) {
         R r = searchClient.searchProduct(productSearchParam);
         log.info("org.aliang.service.impl.ProductServiceImpl.search业务结束，结果为：{}",r);
+        return r;
+    }
+
+    /**
+     * 根据商品id集合查询商品集合
+     *
+     * @param productCollectParam
+     * @return
+     */
+    @Override
+    @Cacheable(value = "list.product",key = "#productCollectParam.productIds")
+    public R getProductByIds(ProductCollectParam productCollectParam) {
+        LambdaQueryWrapper<Product> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Product::getProductId,productCollectParam.getProductIds());
+        List<Product> productList = productMapper.selectList(lambdaQueryWrapper);
+        R r = R.ok("商品信息查询成功！", productList);
+        log.info("org.aliang.service.impl.ProductServiceImpl.getProductByIds业务结束,结果为：{}",productList);
         return r;
     }
 }
