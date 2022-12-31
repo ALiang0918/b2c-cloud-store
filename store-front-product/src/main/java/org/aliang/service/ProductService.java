@@ -71,4 +71,7 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     R getProductByIds(ProductCollectParam productCollectParam);
+
+
+
 }

@@ -1,6 +1,7 @@
 package org.aliang.clients;
 
 import org.aliang.param.ProductCollectParam;
+import org.aliang.param.ProductIdParam;
 import org.aliang.pojo.Product;
 import org.aliang.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,4 +23,10 @@ public interface ProductClient {
 
     @PostMapping("/product/collect/list")
     R getCollectList(@RequestBody ProductCollectParam productCollectParam);
+
+    @PostMapping("/product/cart/detail")
+    Product productDetail(@RequestBody ProductIdParam productIdParam);
+
+    @PostMapping("/product/cart/list")
+    List<Product> cartList(@RequestBody ProductCollectParam productCollectParam);
 }

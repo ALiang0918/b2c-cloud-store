@@ -31,3 +31,7 @@ spring:
           uri: lb://collect-service
           predicates:
             - Path=/collect/**
+        - id: cart-service  # 购物车服务
+          uri: lb://cart-service
+          predicates:
+            - Path=/cart/**

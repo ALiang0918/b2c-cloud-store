@@ -204,4 +204,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         log.info("org.aliang.service.impl.ProductServiceImpl.getProductByIds业务结束,结果为：{}",productList);
         return r;
     }
+
 }
