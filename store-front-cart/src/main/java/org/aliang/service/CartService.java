@@ -3,6 +3,8 @@ package org.aliang.service;
 import org.aliang.param.CartSaveParam;
 import org.aliang.utils.R;
 
+import java.util.List;
+
 public interface CartService {
     /**
      * 添加购物车
@@ -31,4 +33,10 @@ public interface CartService {
      * @return
      */
     R remove(CartSaveParam cartSaveParam);
+
+    /**
+     * 清空对应id 购物车项
+     * @param cartIds
+     */
+    void clearIds(List<Integer> cartIds);
 }

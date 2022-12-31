@@ -6,6 +6,7 @@ import org.aliang.param.ProductHotParam;
 import org.aliang.param.ProductIdsParam;
 import org.aliang.param.ProductSearchParam;
 import org.aliang.pojo.Product;
+import org.aliang.to.OrderToProduct;
 import org.aliang.utils.R;
 
 import java.util.List;
@@ -73,5 +74,9 @@ public interface ProductService extends IService<Product> {
     R getProductByIds(ProductCollectParam productCollectParam);
 
 
-
+    /**
+     * 修改库存和增加销售量
+     * @param orderToProducts
+     */
+    void subNumber(List<OrderToProduct> orderToProducts);
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ProductConfiguration extends CacheConfiguration{
+public class CartConfiguration {
 
     /**
      * mq序列化方式，选择json！

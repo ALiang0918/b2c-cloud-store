@@ -17,6 +17,7 @@ import org.aliang.param.ProductSearchParam;
 import org.aliang.pojo.Picture;
 import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
+import org.aliang.to.OrderToProduct;
 import org.aliang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -205,4 +209,28 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return r;
     }
 
+    /**
+     * 修改库存和增加销售量
+     *
+     * @param orderToProducts
+     */
+    @Override
+    public void subNumber(List<OrderToProduct> orderToProducts) {
+        //将集合转成map key:value productId : ordreToProduct
+        Map<Integer, OrderToProduct> map = orderToProducts.stream().collect(Collectors.toMap(OrderToProduct::getProductId, v -> v));
+        //获取商品的id集合
+        Set<Integer> productIds = map.keySet();
+        //查询集合对应的商品信息
+        List<Product> productList = productMapper.selectBatchIds(productIds);
+        //修改商品信息
+        for (Product product : productList) {
+            Integer num = map.get(product.getProductId()).getNum();
+            //减少库存
+            product.setProductNum(product.getProductNum() - num);
+            //增加销量
+            product.setProductSales(product.getProductSales() + num);
+        }
+        this.updateBatchById(productList);
+        log.info("org.aliang.service.impl.ProductServiceImpl.subNumber业务结束，结果：库存和销售量修改完毕");
+    }
 }

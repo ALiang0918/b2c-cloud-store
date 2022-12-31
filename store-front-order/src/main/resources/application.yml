@@ -1,13 +1,13 @@
 spring:
   # 连接池配置
   datasource:
-    url: jdbc:mysql://139.9.2.237:3307/store_cart?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false
+    url: jdbc:mysql://139.9.2.237:3307/store_order?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false
     username: root
     password: ln123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   profiles:
-    active: mq
+    active: mq # 激活缓存和mq配置
 mybatis-plus:
   mapper-locations: classpath:mappers/*.xml
   configuration:
@@ -15,12 +15,13 @@ mybatis-plus:
     auto-mapping-behavior: full
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
-  type-aliases-package: org.aliang.pojo #设置别名a
+  type-aliases-package: org.aliang.pojo #设置别名
+
 ribbon:
   eager-load:
     enabled: true #开启饥饿加载提升第一次访问速度
     clients:
-      - cart-service #指定开启服务
+      - order-service #指定开启服务
 feign:
   httpclient:
     enabled: true  # 开启httpClient开关,启动连接池,提升feign连接效率!

@@ -178,4 +178,21 @@ public class CartServiceImpl implements CartService {
         log.info("org.aliang.service.impl.CartServiceImpl.remove业务结束，结果为:{}","删除购物车数据成功！");
         return R.ok("删除数据成功!");
     }
+
+    /**
+     * 清空对应id 购物车项
+     *
+     * @param cartIds
+     */
+    @Override
+    public void clearIds(List<Integer> cartIds) {
+        if (cartIds == null || cartIds.size() == 0){
+            log.info("org.aliang.service.impl.CartServiceImpl.clearIds 参数异常");
+        }
+        int rows = cartMapper.deleteBatchIds(cartIds);
+        if (rows == 0){
+            log.info("org.aliang.service.impl.CartServiceImpl.clearIds 删除购物车数据失败");
+        }
+        log.info("org.aliang.service.impl.CartServiceImpl.clearIds业务结束，结果为:{}",cartIds);
+    }
 }
