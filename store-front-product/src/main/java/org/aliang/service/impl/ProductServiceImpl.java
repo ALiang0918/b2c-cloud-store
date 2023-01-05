@@ -233,4 +233,19 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         this.updateBatchById(productList);
         log.info("org.aliang.service.impl.ProductServiceImpl.subNumber业务结束，结果：库存和销售量修改完毕");
     }
+
+    /**
+     * 根据类别id 查询该类别下的商品数量
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public Long categoryCount(Integer categoryId) {
+        LambdaQueryWrapper<Product> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Product::getCategoryId,categoryId);
+        Long aLong = productMapper.selectCount(lambdaQueryWrapper);
+        log.info("org.aliang.service.impl.ProductServiceImpl.categoryCount业务结束，结果为:{}",aLong);
+        return aLong;
+    }
 }

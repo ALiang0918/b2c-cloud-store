@@ -79,4 +79,11 @@ public interface ProductService extends IService<Product> {
      * @param orderToProducts
      */
     void subNumber(List<OrderToProduct> orderToProducts);
+
+    /**
+     * 根据类别id 查询该类别下的商品数量
+     * @param categoryId
+     * @return
+     */
+    Long categoryCount(Integer categoryId);
 }

@@ -1,6 +1,8 @@
 package org.aliang.clients;
 
+import org.aliang.param.PageParam;
 import org.aliang.param.ProductHotParam;
+import org.aliang.pojo.Category;
 import org.aliang.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,4 +26,16 @@ public interface CategoryClient {
 
     @GetMapping("/category/list")
     R getCategoryList();
+
+    @PostMapping("/category/admin/list")
+    R getCategoryList(@RequestBody PageParam pageParam);
+
+    @PostMapping("/category/admin/save")
+    R save(@RequestBody Category category);
+
+    @PostMapping("/category/admin/remove")
+    R remove(@RequestBody Integer categoryId);
+
+    @PostMapping("/category/admin/update")
+    R update(@RequestBody  Category category);
 }

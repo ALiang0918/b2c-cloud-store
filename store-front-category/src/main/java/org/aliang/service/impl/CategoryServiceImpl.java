@@ -1,9 +1,13 @@
 package org.aliang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.aliang.clients.ProductClient;
 import org.aliang.mapper.CategoryMapper;
+import org.aliang.param.PageParam;
 import org.aliang.param.ProductHotParam;
 import org.aliang.pojo.Category;
 import org.aliang.service.CategoryService;
@@ -20,6 +24,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private ProductClient productClient;
     /**
      * 根据类别名称查询类别并封装返回
      *
@@ -89,5 +96,70 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<Object> categoryIdList = categoryMapper.selectObjs(lambdaQueryWrapper);
         log.info("org.aliang.service.impl.CategoryServiceImpl.names业务完成，结果为:{}",categoryIdList);
         return R.ok("查询成功！",categoryIdList);
+    }
+
+    /**
+     * 后台管理 类别分页查询
+     *
+     * @param pageParam
+     * @return
+     */
+    @Override
+    public R pageList(PageParam pageParam) {
+        IPage<Category> page = new Page<>(pageParam.getCurrentPage(),pageParam.getPageSize());
+        page = categoryMapper.selectPage(page,null);
+        log.info("org.aliang.service.impl.CategoryServiceImpl.pageList业务结束，结果为:{}",page);
+        return R.ok("类别查询成功！",page.getRecords(),page.getTotal());
+    }
+
+    /**
+     * 后台管理 新增类别
+     *
+     * @param category
+     * @return
+     */
+    @Override
+    public R saveCategory(Category category) {
+        if (category == null || StringUtils.isEmpty(category.getCategoryName())){
+            return R.fail("类别保存失败!");
+        }
+        int rows = categoryMapper.insert(category);
+        if (rows == 0){
+            return R.fail("类别保存失败!");
+        }
+        return R.ok("类别保存成功");
+    }
+
+    /**
+     * 根据id删除类别
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public R remove(Integer categoryId) {
+        Long count = productClient.count(categoryId);
+        if (count > 0){
+            return R.fail("无法删除类别,有:"+count+"件商品引用!");
+        }
+
+        int rows = categoryMapper.deleteById(categoryId);
+
+        if (rows == 0){
+
+            return R.fail("删除类别失败!");
+        }
+        return R.ok("类别删除成功!");
+    }
+
+    @Override
+    public R update(Category category) {
+        int rows = categoryMapper.updateById(category);
+
+        if (rows > 0){
+            return R.ok("类别修改成功!");
+        }
+
+        return R.fail("类别修改失败!");
     }
 }

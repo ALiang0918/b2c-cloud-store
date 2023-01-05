@@ -1,6 +1,7 @@
 package org.aliang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.aliang.param.PageParam;
 import org.aliang.param.ProductHotParam;
 import org.aliang.pojo.Category;
 import org.aliang.utils.R;
@@ -33,4 +34,27 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     R names(ProductHotParam productHotParam);
+
+    /**
+     * 后台管理 类别分页查询
+     * @param pageParam
+     * @return
+     */
+    R pageList(PageParam pageParam);
+
+    /**
+     * 后台管理 新增类别
+     * @param category
+     * @return
+     */
+    R saveCategory(Category category);
+
+    /**
+     * 根据id删除类别
+     * @param categoryId
+     * @return
+     */
+    R remove(Integer categoryId);
+
+    R update(Category category);
 }
