@@ -20,6 +20,7 @@
         <module>store-front-collect</module>
         <module>store-front-cart</module>
         <module>store-front-order</module>
+        <module>store-admin</module>
     </modules>
 
     <parent>
