@@ -87,6 +87,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return R.ok("订单保存成功！");
     }
 
+    @Override
+    public R check(Integer productId) {
+        LambdaQueryWrapper<Order> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Order::getProductId,productId);
+        Long aLong = orderMapper.selectCount(lambdaQueryWrapper);
+        if (aLong > 0){
+            return R.fail("订单："+ aLong +"项引用该商品，不能删除！");
+        }
+        return R.ok("无订单引用，可以删除！");
+    }
+
     /**
      * 根据用户id查询订单列表 参数已校验
      * 1.查询用户对应的全部订单项

@@ -1,10 +1,7 @@
 package org.aliang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.aliang.param.ProductCollectParam;
-import org.aliang.param.ProductHotParam;
-import org.aliang.param.ProductIdsParam;
-import org.aliang.param.ProductSearchParam;
+import org.aliang.param.*;
 import org.aliang.pojo.Product;
 import org.aliang.to.OrderToProduct;
 import org.aliang.utils.R;
@@ -86,4 +83,20 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     Long categoryCount(Integer categoryId);
+
+    /**
+     * 商品保存
+     * @param productSaveParam
+     * @return
+     */
+    R adminSave(ProductSaveParam productSaveParam);
+
+    /**
+     * 商品更新
+     * @param product
+     * @return
+     */
+    R adminUpdate(Product product);
+
+    R adminRemove(Integer productId);
 }

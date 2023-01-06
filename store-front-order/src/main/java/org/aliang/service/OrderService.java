@@ -23,4 +23,6 @@ public interface OrderService extends IService<Order> {
     R list(Integer userId);
 
     R adminList(PageParam pageParam);
+
+    R check(Integer productId);
 }

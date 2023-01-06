@@ -99,4 +99,12 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
         //3.结果封装
         return R.ok("收藏移除成功!");
     }
+
+    @Override
+    public R removeByPid(Integer productId) {
+        LambdaQueryWrapper<Collect> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Collect::getProductId,productId);
+        collectMapper.delete(lambdaQueryWrapper);
+        return R.ok("收藏移除成功!");
+    }
 }

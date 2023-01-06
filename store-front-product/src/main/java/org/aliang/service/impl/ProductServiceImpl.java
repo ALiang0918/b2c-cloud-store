@@ -5,23 +5,25 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.aliang.clients.CategoryClient;
-import org.aliang.clients.SearchClient;
+import org.aliang.clients.*;
 import org.aliang.mapper.PictureMapper;
 import org.aliang.mapper.ProductMapper;
-import org.aliang.param.ProductCollectParam;
-import org.aliang.param.ProductHotParam;
-import org.aliang.param.ProductIdsParam;
-import org.aliang.param.ProductSearchParam;
+import org.aliang.param.*;
 import org.aliang.pojo.Picture;
 import org.aliang.pojo.Product;
 import org.aliang.service.ProductService;
 import org.aliang.to.OrderToProduct;
 import org.aliang.utils.R;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     @Autowired
     private ProductMapper productMapper;
@@ -43,6 +46,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Autowired
     private SearchClient searchClient;
+
+    @Autowired
+    private CartClient cartClient;
+    @Autowired
+    private OrderClient orderClient;
+    @Autowired
+    private CollectClient collectClient;
+
     /**
      * 根据类别名称查询热门产品
      *
@@ -247,5 +258,105 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Long aLong = productMapper.selectCount(lambdaQueryWrapper);
         log.info("org.aliang.service.impl.ProductServiceImpl.categoryCount业务结束，结果为:{}",aLong);
         return aLong;
+    }
+
+    /**
+     * 商品保存
+     *  1.商品数据保存
+     *  2.商品的图片详情切割和保存
+     *  3.搜索数据库的数据添加
+     *  4.清空商品相关的缓存数据
+     * @param productSaveParam
+     * @return
+     */
+    @Override
+    @CacheEvict(value = "list.product",allEntries = true)
+    public R adminSave(ProductSaveParam productSaveParam) {
+        //商品数据保存
+        Product product = new Product();
+        BeanUtils.copyProperties(productSaveParam,product);
+        int rows = productMapper.insert(product);
+        if (rows == 0){
+            return R.fail("商品保存失败!");
+        }
+        log.info("org.aliang.service.impl.ProductServiceImpl.adminSave业务结束，结果：{}",rows);
+        //商品图片保存
+        String pictures = productSaveParam.getPictures();
+        if (!StringUtils.isEmpty(pictures)){
+            String[] urls = pictures.split("\\+");
+            for (String url : urls) {
+                Picture picture = new Picture();
+                picture.setProductId(product.getProductId());
+                picture.setProductPicture(url);
+                pictureMapper.insert(picture);
+            }
+        }
+        //搜索数据库的数据添加
+        R r = searchClient.saveOrUpdate(product);
+        log.info("org.aliang.service.impl.ProductServiceImpl.adminSave业务结束，结果：{}",r);
+        return r;
+    }
+
+    /**
+     * 商品更新
+     *
+     * @param product
+     * @return
+     */
+    @Override
+    public R adminUpdate(Product product) {
+        int row = productMapper.updateById(product);
+        if (row == 0){
+            return R.fail("商品更新失败！");
+        }
+        //搜索数据库的数据添加
+        R r = searchClient.saveOrUpdate(product);
+        log.info("org.aliang.service.impl.ProductServiceImpl.adminUpdate业务结束，结果：{}",r);
+        return r;
+    }
+
+    /**
+     * 商品删除业务
+     *  1.检查购物车
+     *  2.检查订单
+     *  3.删除商品
+     *  4.删除商品相关的图片
+     *  5.删除收藏
+     *  6.es数据同步
+     *  7.清空缓存
+     * @param productId
+     * @return
+     */
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "list.product",allEntries = true),
+                    @CacheEvict(value = "product",key = "#productId")
+            }
+    )
+    public R adminRemove(Integer productId) {
+        R r = cartClient.removeCheck(productId);
+        if ("004".equals(r.getCode())){
+            return r;
+        }
+
+        r = orderClient.removeCheck(productId);
+        if ("004".equals(r.getCode())){
+            return r;
+        }
+
+        productMapper.deleteById(productId);
+
+        LambdaQueryWrapper<Picture> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Picture::getProductId,productId);
+        pictureMapper.delete(lambdaQueryWrapper);
+
+        r = collectClient.removeByPid(productId);
+        if ("004".equals(r.getCode())){
+            return r;
+        }
+
+        searchClient.remove(productId);
+        return R.ok("删除商品成功！");
     }
 }

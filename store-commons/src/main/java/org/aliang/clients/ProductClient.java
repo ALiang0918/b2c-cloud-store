@@ -2,6 +2,7 @@ package org.aliang.clients;
 
 import org.aliang.param.ProductCollectParam;
 import org.aliang.param.ProductIdParam;
+import org.aliang.param.ProductSaveParam;
 import org.aliang.pojo.Product;
 import org.aliang.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -30,6 +31,15 @@ public interface ProductClient {
     @PostMapping("/product/cart/list")
     List<Product> cartList(@RequestBody ProductCollectParam productCollectParam);
 
-    @PostMapping("/product/category/count")
+    @PostMapping("/product/admin/count")
     Long count(@RequestBody Integer categoryId);
+
+    @PostMapping("/product/admin/save")
+    R adminSave(@RequestBody ProductSaveParam productSaveParam);
+
+    @PostMapping("/product/admin/update")
+    R adminUpdate(@RequestBody Product product);
+
+    @PostMapping("/product/admin/remove")
+    R adminRemove(@RequestBody Integer productId);
 }

@@ -179,6 +179,8 @@ public class CartServiceImpl implements CartService {
         return R.ok("删除数据成功!");
     }
 
+
+
     /**
      * 清空对应id 购物车项
      *
@@ -194,5 +196,16 @@ public class CartServiceImpl implements CartService {
             log.info("org.aliang.service.impl.CartServiceImpl.clearIds 删除购物车数据失败");
         }
         log.info("org.aliang.service.impl.CartServiceImpl.clearIds业务结束，结果为:{}",cartIds);
+    }
+
+    @Override
+    public R check(Integer productId) {
+        LambdaQueryWrapper<Cart> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Cart::getProductId,productId);
+        Long aLong = cartMapper.selectCount(lambdaQueryWrapper);
+        if (aLong > 0){
+            return R.fail("有："+ aLong +"件购物车商品引用，删除失败！");
+        }
+        return R.ok("购物车无商品引用！");
     }
 }

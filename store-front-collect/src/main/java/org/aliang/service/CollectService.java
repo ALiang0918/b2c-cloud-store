@@ -26,4 +26,6 @@ public interface CollectService extends IService<Collect> {
      * @return
      */
     R removeCollect(Collect collect);
+
+    R removeByPid(Integer productId);
 }

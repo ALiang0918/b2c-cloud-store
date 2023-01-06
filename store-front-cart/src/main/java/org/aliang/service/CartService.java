@@ -39,4 +39,6 @@ public interface CartService {
      * @param cartIds
      */
     void clearIds(List<Integer> cartIds);
+
+    R check(Integer productId);
 }

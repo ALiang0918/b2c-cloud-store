@@ -3,15 +3,19 @@ package org.aliang.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.aliang.doc.ProductDoc;
 import org.aliang.param.ProductSearchParam;
 import org.aliang.pojo.Product;
 import org.aliang.service.SearchService;
 import org.aliang.utils.R;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -75,5 +79,23 @@ public class SearchServiceImpl implements SearchService {
         R r = R.ok("查询成功", arrayList, value);
         log.info("org.aliang.service.impl.SearchServiceImpl.searchProduct()业务方法执行完毕,查询结果为：{}",r);
         return r;
+    }
+
+    @Override
+    public R save(Product product) throws IOException {
+        IndexRequest indexRequest = new IndexRequest("product").id(product.getProductId().toString());
+        ProductDoc productDoc = new ProductDoc(product);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(productDoc);
+        indexRequest.source(json, XContentType.JSON);
+        restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+        return R.ok("商品数据更新成功！");
+    }
+
+    @Override
+    public R remove(Integer productId) throws IOException {
+        DeleteRequest deleteRequest = new DeleteRequest("product").id(productId.toString());
+        restHighLevelClient.delete(deleteRequest,RequestOptions.DEFAULT);
+        return R.ok("商品数据删除成功！");
     }
 }

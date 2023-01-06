@@ -34,7 +34,6 @@ public class CategoryAdminController {
 
     @PostMapping("admin/update")
     public R update(@RequestBody Category category){
-
         return categoryService.update(category);
     }
 }
