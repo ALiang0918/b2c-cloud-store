@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.aliang.mapper.OrderMapper;
 import org.aliang.clients.ProductClient;
 import org.aliang.param.OrderParam;
+import org.aliang.param.PageParam;
 import org.aliang.param.ProductCollectParam;
 import org.aliang.pojo.Order;
 import org.aliang.pojo.Product;
 import org.aliang.service.OrderService;
 import org.aliang.to.OrderToProduct;
 import org.aliang.utils.R;
+import org.aliang.vo.AdminOrderVo;
 import org.aliang.vo.CartVo;
 import org.aliang.vo.OrderVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -35,6 +37,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     private ProductClient productClient;
+
+    @Autowired
+    private OrderMapper orderMapper;
     /**
      * 进行订单数据保存业务
      * 1.将购物车数据转成订单数据
@@ -124,5 +129,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         R r = R.ok("订单数据获取成功！", result);
         log.info("org.aliang.service.impl.OrderServiceImpl.list业务结束，结果为:{}",result);
         return r;
+    }
+
+    @Override
+    public R adminList(PageParam pageParam) {
+        int offset = (pageParam.getCurrentPage() - 1) * pageParam.getPageSize();
+        int number = pageParam.getPageSize();
+
+        //查询数量
+        Long total = orderMapper.selectCount(null);
+        //自定义查询
+        List<AdminOrderVo> adminOrderVoList = orderMapper.selectAdminOrders(offset,number);
+
+
+        return R.ok("查询成功",adminOrderVoList,total);
     }
 }
