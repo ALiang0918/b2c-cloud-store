@@ -45,13 +45,3 @@ feign:
 server:
   servlet:
     context-path: /admin
-
-#OSS配置
-aliyun:
-  oss:
-    file:
-      # 控制台 - oss - 点击对应桶 - 概览 - 地域节点
-      endpoint: oss-cn-hangzhou.aliyuncs.com
-      keyid: LTAI5tEWL6j45Kw28yNj3i2J
-      keysecret: 18PaS9uQ61tcRcGpI0GcCO9nXNo1Ru
-      bucketname: b2c-store-aliang
