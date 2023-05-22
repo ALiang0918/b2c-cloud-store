@@ -3,6 +3,7 @@ package org.aliang.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.aliang.config.RedisIdWorker;
 import org.aliang.mapper.OrderMapper;
 import org.aliang.clients.ProductClient;
 import org.aliang.param.OrderParam;
@@ -39,6 +40,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private ProductClient productClient;
 
     @Autowired
+    private RedisIdWorker redisIdWorker;
+
+    @Autowired
     private OrderMapper orderMapper;
     /**
      * 进行订单数据保存业务
@@ -61,7 +65,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         //生成数据
         Integer userId = orderParam.getUserId();
-        long orderId = System.currentTimeMillis();
+        long orderId = redisIdWorker.nextId("b2c");
         for (CartVo cartVo : orderParam.getProducts()) {
             cartIds.add(cartVo.getId()); //保存删除的购物车项的id
             OrderToProduct orderToProduct = new OrderToProduct();
